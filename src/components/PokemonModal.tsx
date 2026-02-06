@@ -1,6 +1,5 @@
 'use client';
 
-// Importaciones
 import React, { useEffect, useState } from 'react';
 import { Pokemon } from '@/types';
 import { useLanguage } from '@/context/LanguageContext';
@@ -12,22 +11,54 @@ interface Props {
 }
 
 // Modal (Ventana emergente) con detalles del Pokemon
-const PokemonModal = ({ pokemon, onClose }: Props) => {
-    const { t } = useLanguage();
-    const [isVisible, setIsVisible] = useState(false);
+import { getPokemonById } from '@/utils/api';
 
-    // Efecto al abrir: Bloquea el scroll de la página
+const PokemonModal = ({ pokemon: initialPokemon, onClose }: Props) => {
+    const { dict: t } = useLanguage();
+    const [isVisible, setIsVisible] = useState(false);
+    const [pokemon, setPokemon] = useState(initialPokemon);
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         setIsVisible(true);
-        // Bloquear scroll
         document.body.style.overflow = 'hidden';
+
         return () => { document.body.style.overflow = 'unset'; };
     }, []);
 
-    // Función para cerrar con animación suave
+    // Actualizar pokemon si cambia la prop (aunque normalmente no pasa en este contexto modal)
+    useEffect(() => {
+        setPokemon(initialPokemon);
+    }, [initialPokemon]);
+
+    // Función para manejar el cierre con animación
     const handleClose = () => {
-        setIsVisible(false);
+        setIsVisible(false); 
         setTimeout(onClose, 300);
+    };
+
+    const handlePrev = async (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (pokemon.id <= 1 || loading) return;
+
+        setLoading(true);
+        const prev = await getPokemonById(pokemon.id - 1);
+        if (prev) {
+            setPokemon(prev);
+        }
+        setLoading(false);
+    };
+
+    const handleNext = async (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (loading) return;
+
+        setLoading(true);
+        const next = await getPokemonById(pokemon.id + 1);
+        if (next) {
+            setPokemon(next);
+        }
+        setLoading(false);
     };
 
     return (
@@ -35,12 +66,12 @@ const PokemonModal = ({ pokemon, onClose }: Props) => {
             <div className={`${styles.modal} ${isVisible ? styles.modalVisible : ''}`} onClick={e => e.stopPropagation()}>
                 <button className={styles.closeBtn} onClick={handleClose}>×</button>
 
-                <div className={styles.header}>
+                <div className={styles.header} style={{ opacity: loading ? 0.5 : 1, transition: 'opacity 0.2s' }}>
                     <img src={pokemon.image} alt={pokemon.name} className={styles.image} />
                     <h2 className={styles.name}>{pokemon.name} <span className={styles.id}>#{pokemon.id}</span></h2>
                 </div>
 
-                <div className={styles.statsLayout}>
+                <div className={styles.statsLayout} style={{ opacity: loading ? 0.5 : 1, transition: 'opacity 0.2s' }}>
                     <div className={styles.statRow}>
                         <span className={styles.statLabel}>HP</span>
                         <div className={styles.barContainer}>
@@ -73,6 +104,23 @@ const PokemonModal = ({ pokemon, onClose }: Props) => {
                         </div>
                         <span className={styles.statValue}>{pokemon.stats?.defense}</span>
                     </div>
+                </div>
+
+                <div className={styles.navigation}>
+                    <button
+                        className={styles.navBtn}
+                        onClick={handlePrev}
+                        disabled={pokemon.id <= 1 || loading}
+                    >
+                        ← Prev
+                    </button>
+                    <button
+                        className={styles.navBtn}
+                        onClick={handleNext}
+                        disabled={loading || pokemon.id >= 1000}
+                    >
+                        Next →
+                    </button>
                 </div>
             </div>
         </div>

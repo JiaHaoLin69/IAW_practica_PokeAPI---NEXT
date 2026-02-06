@@ -9,7 +9,7 @@ import PokemonModal from './PokemonModal';
 
 // Tarjeta individual de Pokemon
 const PokemonCard = ({ pokemon }: { pokemon: Pokemon }) => {
-    const { t } = useLanguage();
+    const { dict: t } = useLanguage();
     // Estado para mostrar/ocultar el modal de detalles
     const [showModal, setShowModal] = useState(false);
 

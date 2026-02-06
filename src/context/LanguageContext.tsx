@@ -1,36 +1,35 @@
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { Language, dictionary } from '@/types';
+import { createContext, useContext, useState } from 'react';
+import { getDictionary } from './diccionario';
 
-interface LanguageContextType {
-    language: Language;
-    setLanguage: (lang: Language) => void;
-    t: (typeof dictionary)['es'];
-}
+// Definición del tipo de datos que compartirá nuestro contexto
+type LanguageContextType = {
+    idioma: string;
+    setIdioma: (lang: string) => void;
+    dict: any; // Objeto con todas las traducciones
+};
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const LanguageContext = createContext<LanguageContextType | null>(null);
 
-export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-    const [language, setLanguage] = useState<Language>('es');
-
-    const value = {
-        language,
-        setLanguage,
-        t: dictionary[language],
-    };
+// Provider: Componente que envuelve la app y "provee" el estado del idioma
+export function LanguageProvider({ children }: { children: React.ReactNode }) {
+    const [idioma, setIdioma] = useState('en'); // Idioma por defecto: Inglés
+    const dict = getDictionary(idioma); // Carga el diccionario según el idioma actual
 
     return (
-        <LanguageContext.Provider value={value}>
+        // Pasamos los valores (idioma, setter, diccionario) a todos los hijos
+        <LanguageContext.Provider value={{ idioma, setIdioma, dict }}>
             {children}
         </LanguageContext.Provider>
     );
 };
 
-export const useLanguage = () => {
+// Custom Hook: Facilita el acceso al contexto desde cualquier componente
+export function useLanguage() {
     const context = useContext(LanguageContext);
     if (!context) {
-        throw new Error('useLanguage must be used within a LanguageProvider');
+        throw new Error('useLanguage debe usarse dentro de un LanguageProvider');
     }
-    return context;
+    return context; // Retorna { idioma, setIdioma, dict }
 };

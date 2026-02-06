@@ -7,22 +7,20 @@ import { getRandomPokemon } from '@/utils/api';
 import PokemonCard from '@/components/PokemonCard';
 import styles from './page.module.css';
 
-// Página principal
 export default function Home() {
-  const { t } = useLanguage();
+  const { dict: t } = useLanguage();
 
-  // Estado para el pokemon aleatorio del día
+  // Estado para guardar el pokemon del día (inicialmente null hasta que cargue)
   const [pokemon, setPokemon] = useState<Pokemon | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Efecto: Carga un pokemon aleatorio al iniciar
+  // useEffect se ejecuta una sola vez al cargar la página (array de dependencias vacío [])
   useEffect(() => {
     const fetchRandom = async () => {
-      setLoading(true);
-      // Elige un número entre 1 y 386 (Gen 1-3)
+      setLoading(true); 
       const p = await getRandomPokemon(1, 386);
-      setPokemon(p);
-      setLoading(false);
+      setPokemon(p); 
+      setLoading(false); 
     };
     fetchRandom();
   }, []);

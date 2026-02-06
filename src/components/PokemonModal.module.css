@@ -127,3 +127,38 @@
     text-align: right;
     font-weight: bold;
 }
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--pk-border);
+}
+
+.navBtn {
+    background: hsl(var(--pk-surface));
+    color: hsl(var(--pk-text));
+    border: 1px solid var(--pk-border);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.navBtn:hover:not(:disabled) {
+    background: hsl(var(--pk-primary));
+    border-color: hsl(var(--pk-primary));
+    color: white;
+}
+
+.navBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(1);
+}

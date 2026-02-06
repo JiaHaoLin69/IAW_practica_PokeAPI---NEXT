@@ -20,6 +20,8 @@ export type Translations = {
     gen1: string;
     gen2: string;
     gen3: string;
+    gen4: string;
+    more_generations: string;
     contact: string;
     details: string;
     footer_text: string;
@@ -41,6 +43,8 @@ export const dictionary: Translations = {
     gen1: "Primera Generación",
     gen2: "Segunda Generación",
     gen3: "Tercera Generación",
+    gen4: "Cuarta Generación",
+    more_generations: "Más Generaciones",
     contact: "Contacto",
     details: "Ver detalle",
     footer_text: "Esta web está generada en NEXT por el alumno [Tu Nombre] del IES Cura Valera.",
@@ -59,6 +63,8 @@ export const dictionary: Translations = {
     gen1: "First Generation",
     gen2: "Second Generation",
     gen3: "Third Generation",
+    gen4: "Fourth Generation",
+    more_generations: "More Generations",
     contact: "Contact",
     details: "View Details",
     footer_text: "This website is generated in NEXT by the student [Your Name] from IES Cura Valera.",
@@ -77,6 +83,8 @@ export const dictionary: Translations = {
     gen1: "Première Génération",
     gen2: "Deuxième Génération",
     gen3: "Troisième Génération",
+    gen4: "Quatrième Génération",
+    more_generations: "Plus de Générations",
     contact: "Contact",
     details: "Voir détails",
     footer_text: "Ce site est généré en NEXT par l'étudiant [Votre Nom] de l'IES Cura Valera.",
